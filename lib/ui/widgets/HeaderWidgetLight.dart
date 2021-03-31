@@ -52,7 +52,7 @@ class HeaderViewLight extends State<HeaderWidgetLight> {
                 fontSize: 14.0,
                 color: AppColors.white,
                 fontFamily: AppFonts.AppFont,
-                fontWeight: AppFontsStyle.MEDIUM),
+                fontWeight: AppFontsStyle.BOLD),
           ))
         ],
       )

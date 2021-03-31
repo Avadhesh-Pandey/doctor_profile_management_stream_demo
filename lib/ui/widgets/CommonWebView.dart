@@ -62,7 +62,7 @@ class CommonWebWidget extends State<CommonWebView> {
                                       fontSize: AppFontSize.size16,
                                       color: AppColors.black,
                                       fontFamily: AppFonts.AppFont,
-                                      fontWeight: AppFontsStyle.MEDIUM)),
+                                      fontWeight: AppFontsStyle.BOLD)),
                             )
                         ),
                         IconButton(

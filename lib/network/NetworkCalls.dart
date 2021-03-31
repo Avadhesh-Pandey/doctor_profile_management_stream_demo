@@ -65,13 +65,13 @@ class NetworkCalls {
         apiResponse.status=false;
         print(data);
         print(e.response.headers);
-        print(e.response.request);
+        // print(e.response.request);
         print(e.response.statusCode);
         apiResponse.statusCode=e.response.statusCode;
         ApiResult(apiResponse);
 
       }
-      else if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      else if (e.type == DioErrorType.connectTimeout) {
         ApiResponse apiResponse;
         {
           apiResponse=new ApiResponse.fromJson({"status":false,"message":"Please check your internet connection & try again later","data":[]});
@@ -80,7 +80,7 @@ class NetworkCalls {
         apiResponse.status=false;
         ApiResult(apiResponse);
       }
-      else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      else if (e.type == DioErrorType.receiveTimeout) {
         ApiResponse apiResponse;
         {
           apiResponse=new ApiResponse.fromJson({"status":false,"message":"Please check your internet connection & try again later","data":[]});
@@ -91,7 +91,7 @@ class NetworkCalls {
       }
       else{
         // Something happened in setting up or sending the request that triggered an Error
-        print(e.request);
+        // print(e.request);
         print(e.message);
       }
     }

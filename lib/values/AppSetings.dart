@@ -32,7 +32,6 @@ class AppFontsStyle
 {
   static const FontWeight BOLD = FontWeight.w700;
   static const FontWeight LIGHT = FontWeight.w300;
-  static const FontWeight MEDIUM = FontWeight.w500;
   static const FontWeight REGULAR = FontWeight.w400;
 }
 
@@ -45,6 +44,7 @@ class AppColors
   static const Color themeColor = Color(0xFF015ecb);
   static const Color themeColorDark = Color(0xFF2f579F);
   static const Color themeContrastColor = Color(0xFFfab206);
+  static const Color themeContrastColorTransparent = Color(0x90fab206);
   static const Color themeContrastColorTwo = Color(0xFF19B792);
 
   static const Color textFieldBG = Color(0xFFF8F9FB);
@@ -56,6 +56,7 @@ class AppColors
   static const Color greyBoxLight = Color(0xFFFAFAFA);
   static const Color black = Color(0xFF000000);
   static const Color white = Color(0xFFFFFFFF);
+  static const Color white60 = Color(0x60FFFFFF);
   static const Color green = Color(0xFF166d20);
   static const Color tiles_bg = Color(0xFFFFFAE5);
   static const Color transparent = Color(0x00000000);

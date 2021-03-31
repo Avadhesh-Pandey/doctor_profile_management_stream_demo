@@ -76,7 +76,7 @@ class RetryDialog extends StatelessWidget {
                   fontSize: AppFontSize.size20,
                   color: AppColors.white,
                   fontFamily: AppFonts.AppFont,
-                  fontWeight: AppFontsStyle.MEDIUM),
+                  fontWeight: AppFontsStyle.BOLD),
             ),
           ),
           SizedBox(height: 20.0),

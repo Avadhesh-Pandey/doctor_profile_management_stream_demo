@@ -34,7 +34,7 @@ class CommonUis
             fontSize: 12.0,
             color: AppColors.black,
             fontFamily: AppFonts.AppFont,
-            fontWeight: AppFontsStyle.MEDIUM),
+            fontWeight: AppFontsStyle.BOLD),
       )
     );
   }
@@ -80,7 +80,31 @@ class CommonUis
                 fontSize: 14.0,
                 color: AppColors.white,
                 fontFamily: AppFonts.AppFont,
-                fontWeight: AppFontsStyle.MEDIUM),
+                fontWeight: AppFontsStyle.BOLD),
+          )),
+    );
+  }
+  static Container getThemeRaisedButtonDisabled(String text,Function() onButtonPressed,{double height=50.0})
+  {
+    return Container(
+      margin: EdgeInsets.only(right: 10, left: 10),
+      width: double.infinity,
+      height: height,
+      child: RaisedButton(
+          onPressed: () {
+            onButtonPressed();
+          },
+          color: AppColors.themeContrastColorTwo,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0)),
+          padding: EdgeInsets.all(0.0),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 14.0,
+                color: AppColors.white60,
+                fontFamily: AppFonts.AppFont,
+                fontWeight: AppFontsStyle.BOLD),
           )),
     );
   }
@@ -114,7 +138,7 @@ class CommonUis
                 fontSize: 14.0,
                 color: AppColors.themeContrastColor,
                 fontFamily: AppFonts.AppFont,
-                fontWeight: AppFontsStyle.MEDIUM),
+                fontWeight: AppFontsStyle.BOLD),
           )),
     );
   }

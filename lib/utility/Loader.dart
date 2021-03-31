@@ -25,12 +25,12 @@ class Loader{
               children: <Widget>[
                 SizedBox(height: 10,),
                 CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.themeColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.black),
                   value: null,
                   strokeWidth: 4.0,
                 ),
                 SizedBox(height: 20,),
-                CommonUis.getText("Please Wait...", AppColors.black, 14.0,weight: AppFontsStyle.MEDIUM)
+                CommonUis.getText("Please Wait...", AppColors.black, 14.0,weight: AppFontsStyle.BOLD)
               ],
             ),
           ),

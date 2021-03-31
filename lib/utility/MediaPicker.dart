@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'AppUtill.dart';
+
 enum MediaSource { CAMERA, GALLERY }
 
 class MediaPicker {
@@ -16,15 +18,33 @@ class MediaPicker {
   getImage(context, inner(File imageFile), {isCroping = false}) async {
     try {
       File imageFile;
+      final picker=ImagePicker();
+
       if (_mediaSource == MediaSource.GALLERY) {
-        imageFile = await ImagePicker.pickImage(source: ImageSource.gallery,maxHeight: 2000,maxWidth: 2000);
+        final pickedFile=await picker.getImage(source: ImageSource.gallery);
+        // imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+        if(pickedFile!=null)
+        {
+          imageFile=File(pickedFile.path);
+        }
+        else{
+          AppUtill.printAppLog("pickedFile==null");
+        }
       } else if (_mediaSource == MediaSource.CAMERA) {
-        imageFile = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 2000,maxWidth: 2000);
+        final pickedFile=await picker.getImage(source: ImageSource.camera);
+        // imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+        if(pickedFile!=null)
+        {
+          imageFile=File(pickedFile.path);
+        }
+        else{
+          AppUtill.printAppLog("pickedFile==null");
+        }
       }
 
       if (imageFile!=null && isCroping) {
         imageFile =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
           return ImageCroping(imageFile);
         }));
 
@@ -45,7 +65,6 @@ class ImageCroping extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return ImageCropWidget();
   }
 }
