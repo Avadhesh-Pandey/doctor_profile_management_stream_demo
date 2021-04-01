@@ -8,6 +8,8 @@ class Apis {
 
 
   static String privacy_url = "http://gc9.scci.co.in/Adminsite/privacy_policy.html";
+  static const String GET_CONTACTS = "https://5efdb0b9dd373900160b35e2.mockapi.io/contacts";
+
 
 
 
@@ -63,7 +65,6 @@ class Apis {
   static const String ADD_BANK_ACCOUNT = BASE_URL+"add-bank-account";
   static const String LINK_BANK_ACCOUNT = BASE_URL+"update-user-account";
   static const String DELETE_BANK_ACCOUNT = BASE_URL+"delete-bank-account";
-  static const String GET_BANK_ACCOUNT_LIST = BASE_URL+"bank-account-list";
   static const String GET_TENANT_LIST = BASE_URL+"my-active-tenants";
   static const String ADD_EXTRA_BILL = BASE_URL+"add-extra-bills";
   static const String GET_EXTRA_BILL_LIST = BASE_URL+"extra-bills-list";

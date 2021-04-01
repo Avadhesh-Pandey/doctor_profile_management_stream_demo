@@ -70,6 +70,7 @@ flutter:
     - images/emoji_sad.svg
     - images/info_icon.svg
     - images/notification_bell.svg
+    - images/close_theme_color.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

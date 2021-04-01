@@ -5,6 +5,7 @@ import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
 import 'package:doctor/utility/AppDialog.dart';
 import 'package:doctor/utility/Loader.dart';
+import 'package:doctor/values/AppPrefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -316,7 +317,11 @@ class OTPWidget extends State<OTPScreen> {
       if(value!=null && value.user!=null)
       {
         // AppUtill.printAppLog("${value.user.displayName} ${AppUtill.printClass(value.user)}");
-        AppDialog.showSuccessDialog(context, "", "Authentication successful",);
+        AppUtill.showToast("Authentication successful", context);
+        AppPrefs.getInstance().setLogin();
+        Navigator.of(context).pop();
+        Navigator.of(context).pushNamed('/home');
+
       }
       else {
         AppDialog.showErrorDialog(context, "", "Invalid code/invalid authentication", 0);

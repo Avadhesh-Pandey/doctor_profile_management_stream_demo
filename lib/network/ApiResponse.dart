@@ -4,6 +4,9 @@ class ApiResponse {
   String msg;
   dynamic raw;
 
+
+  ApiResponse.blank();
+
   ApiResponse.fromJson(Map<String, dynamic> json)
       : status = json['status'],
         msg = json['message'],

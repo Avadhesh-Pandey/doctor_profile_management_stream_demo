@@ -167,6 +167,7 @@ class LoginWidget extends State<LoginScreen> {
       },
       codeSent: (String verificationId, int resendToken) async {
         Loader.hideLoader();
+        Navigator.pop(context);
         AppUtill.printAppLog("verifyPhoneNumber::codeSent");
         Navigator.push(context,
             MaterialPageRoute(builder: (context) {

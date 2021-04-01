@@ -46,9 +46,9 @@ class NetworkCalls {
       AppUtill.printAppLog("response result == ${jsonEncode(response.data)}");
 
       if (response.statusCode == 200) {
-      Map raw = JsonCodec().decode(jsonEncode(response.data));
-        ApiResponse apiResponce = ApiResponse.fromJson(response.data);
-        apiResponce.raw=raw;
+        ApiResponse apiResponce = ApiResponse.blank();
+        apiResponce.status=true;
+        apiResponce.raw=(response.data);
         apiResponce.statusCode=response.statusCode;
 
         ApiResult(apiResponce);
@@ -60,10 +60,8 @@ class NetworkCalls {
       // that falls out of the range of 2xx and is also not 304.
       if(e.response != null) {
         ApiResponse apiResponse;
-        var data=e.response.data;
-        apiResponse=new ApiResponse.fromJson(data);
+        apiResponse=new ApiResponse.blank();
         apiResponse.status=false;
-        print(data);
         print(e.response.headers);
         // print(e.response.request);
         print(e.response.statusCode);

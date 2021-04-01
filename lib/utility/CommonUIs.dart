@@ -9,6 +9,7 @@ class CommonUis
       "$text${addAsterisk?"\u002A":""}",
       maxLines: maxLines,
       textAlign: alignment,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           color: color,
           fontFamily: font,

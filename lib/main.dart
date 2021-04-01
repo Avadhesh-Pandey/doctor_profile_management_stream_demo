@@ -1,3 +1,4 @@
+import 'package:doctor/ui/HomeScreen.dart';
 import 'package:doctor/ui/LoginScreen.dart';
 import 'package:doctor/ui/SplashScreen.dart';
 import 'package:doctor/values/AppSetings.dart';
@@ -29,6 +30,7 @@ void main() async {
       // When navigating to the "/" route, build the FirstScreen widget.
       '/': (context) => SplashScreen(),
       '/login': (context) => LoginScreen(),
+      '/home': (context) => HomeScreen(),
     },
   );
   runApp(app);
