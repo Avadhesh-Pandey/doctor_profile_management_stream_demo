@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:doctor/blocs/BlocProvider.dart';
+import 'package:doctor/blocs/HomeScreenBlock.dart';
 import 'package:doctor/blocs/NotesBloc.dart';
 import 'package:doctor/data/Database.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
@@ -34,15 +35,13 @@ class HomeScreen extends StatefulWidget {
 
 class HomeWidget extends State<HomeScreen> {
   Size _size;
-  List<DoctorListResponseModel> _doctorList=List();
+  HomeScreenBlock _homeScreenBlock=HomeScreenBlock();
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getContacts();
+      _homeScreenBlock.getContacts(context);
     });
-
-
     super.initState();
   }
 
@@ -100,16 +99,23 @@ class HomeWidget extends State<HomeScreen> {
             ],
           ),
         ),
-        body: ListView.separated(itemBuilder: (_, index){
-          return ContactListItemWidget(_doctorList[index],onSelected: ()
-            {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return DoctorDetailScreen(_doctorList[index]);
-                  }));
-            },);
-        }, separatorBuilder: (context, index) => Divider(
-        ), itemCount: _doctorList.length)
+        body:StreamBuilder(
+          stream: _homeScreenBlock.listStream,
+          initialData: [],
+          builder: (BuildContext context,AsyncSnapshot snapshot)
+          {
+            return ListView.separated(itemBuilder: (_, index){
+              return ContactListItemWidget(snapshot.data[index],onSelected: ()
+              {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return DoctorDetailScreen(snapshot.data[index]);
+                    }));
+              },);
+            }, separatorBuilder: (context, index) => Divider(
+            ), itemCount: snapshot.data.length);
+          },
+        )
       ),
 
     ), onWillPop: (){
@@ -117,43 +123,5 @@ class HomeWidget extends State<HomeScreen> {
       exit(0);
     });
   }
-
-  getContacts()
-  {
-    DBProvider.db.getNotes().then((value) {
-      if(value!=null && value.length>0)
-        {
-          AppUtill.showToast("Data Retrieved from Local Database", context);
-          AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
-          setState(() {_doctorList=value;});
-        }
-      else
-        {
-          Loader.showLoader(context);
-          ContactProcess().getAllContacts((apiResponse) {
-            Loader.hideLoader();
-            if(apiResponse.status)
-            {
-              setState(() {
-                AppUtill.printAppLog("apiResponse::::${apiResponse.raw}");
-                _doctorList=apiResponse.raw != null ? (apiResponse.raw as List).map((i) => DoctorListResponseModel.fromJson(i)).toList() : List();
-                AppUtill.printAppLog("apiResponse::::${_doctorList.length}");
-              });
-
-              _doctorList.forEach((element) {
-                DBProvider.db.newNote(element);
-              });
-
-              DBProvider.db.getNotes().then((value) {
-                AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
-                _doctorList=value;
-              });
-
-            }
-          });
-        }
-    });
-  }
-
 }
 

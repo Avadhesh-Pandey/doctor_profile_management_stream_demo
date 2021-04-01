@@ -35,12 +35,12 @@ class DoctorListResponseModel {
             description: json['description'], 
             specialization: json['specialization'], 
             languagesKnown: json['languagesKnown'], 
-            gender: json['gender'],
-            blood_group: json['blood_group'],
-            height: json['height'],
-            weight: json['weight'],
-            dob: json['dob'],
-            isEdited: json['isEdited'],
+            gender: json['gender']!=null?json['gender']:"",
+            blood_group: json['blood_group']!=null?json['blood_group']:"",
+            height: json['height']!=null?json['height']:"",
+            weight: json['weight'] !=null?json['weight']:"",
+            dob: json['dob']!=null?json['dob']:"",
+            isEdited: json['isEdited'] is int ? json['isEdited']==1?true:false:json['isEdited'],
         );
     }
 
