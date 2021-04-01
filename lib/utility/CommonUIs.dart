@@ -290,6 +290,7 @@ class CommonUis
       child: CachedNetworkImage(
         height: height,
         width: width,
+        fit: BoxFit.fitWidth,
         imageUrl: imageUrl==null?"":imageUrl,
         placeholder: (context, url) =>
             CircleAvatar(

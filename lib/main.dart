@@ -1,3 +1,5 @@
+import 'package:doctor/blocs/BlocProvider.dart';
+import 'package:doctor/blocs/NotesBloc.dart';
 import 'package:doctor/ui/HomeScreen.dart';
 import 'package:doctor/ui/LoginScreen.dart';
 import 'package:doctor/ui/SplashScreen.dart';

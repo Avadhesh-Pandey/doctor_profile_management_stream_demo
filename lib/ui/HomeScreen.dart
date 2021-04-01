@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:doctor/blocs/BlocProvider.dart';
+import 'package:doctor/blocs/NotesBloc.dart';
+import 'package:doctor/data/Database.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
 import 'package:doctor/process/ContactProcess.dart';
+import 'package:doctor/ui/DoctorDetailScreen.dart';
 import 'package:doctor/ui/OTPScreen.dart';
 import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/ContactListItemWidget.dart';
@@ -17,8 +21,10 @@ import 'package:doctor/network/Apis.dart';
 import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/utility/CommonUIs.dart';
 import 'package:doctor/values/AppSetings.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return HomeWidget();
@@ -35,6 +41,8 @@ class HomeWidget extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getContacts();
     });
+
+
     super.initState();
   }
 
@@ -93,7 +101,13 @@ class HomeWidget extends State<HomeScreen> {
           ),
         ),
         body: ListView.separated(itemBuilder: (_, index){
-          return ContactListItemWidget(_doctorList[index]);
+          return ContactListItemWidget(_doctorList[index],onSelected: ()
+            {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                    return DoctorDetailScreen(_doctorList[index]);
+                  }));
+            },);
         }, separatorBuilder: (context, index) => Divider(
         ), itemCount: _doctorList.length)
       ),
@@ -106,15 +120,36 @@ class HomeWidget extends State<HomeScreen> {
 
   getContacts()
   {
-    Loader.showLoader(context);
-    ContactProcess().getAllContacts((apiResponse) {
-      Loader.hideLoader();
-      if(apiResponse.status)
+    DBProvider.db.getNotes().then((value) {
+      if(value!=null && value.length>0)
         {
-          setState(() {
-            AppUtill.printAppLog("apiResponse::::${apiResponse.raw}");
-            _doctorList=apiResponse.raw != null ? (apiResponse.raw as List).map((i) => DoctorListResponseModel.fromJson(i)).toList() : List();
-            AppUtill.printAppLog("apiResponse::::${_doctorList.length}");
+          AppUtill.showToast("Data Retrieved from Local Database", context);
+          AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
+          setState(() {_doctorList=value;});
+        }
+      else
+        {
+          Loader.showLoader(context);
+          ContactProcess().getAllContacts((apiResponse) {
+            Loader.hideLoader();
+            if(apiResponse.status)
+            {
+              setState(() {
+                AppUtill.printAppLog("apiResponse::::${apiResponse.raw}");
+                _doctorList=apiResponse.raw != null ? (apiResponse.raw as List).map((i) => DoctorListResponseModel.fromJson(i)).toList() : List();
+                AppUtill.printAppLog("apiResponse::::${_doctorList.length}");
+              });
+
+              _doctorList.forEach((element) {
+                DBProvider.db.newNote(element);
+              });
+
+              DBProvider.db.getNotes().then((value) {
+                AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
+                _doctorList=value;
+              });
+
+            }
           });
         }
     });
