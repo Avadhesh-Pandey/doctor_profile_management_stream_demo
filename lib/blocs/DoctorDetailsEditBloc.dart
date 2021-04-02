@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:doctor/blocs/DoctorDetailViewBlock.dart';
+import 'package:doctor/blocs/HomeScreenBlock.dart';
 import 'package:doctor/data/Database.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
 import 'package:doctor/process/ContactProcess.dart';
@@ -40,6 +42,11 @@ class DoctorDetailEditBLOC{
   Stream<String> get genderStream =>_genderStreamController.stream;
 
 
+  final _profileStreamController=StreamController<String>();
+  StreamSink<String> get profileSink =>_profileStreamController.sink;
+  Stream<String> get profileStream =>_profileStreamController.stream;
+
+
   DoctorListResponseModel _doctorListResponseModel;
   DoctorDetailEditBLOC(this._doctorListResponseModel)
   {
@@ -77,19 +84,25 @@ class DoctorDetailEditBLOC{
       this._doctorListResponseModel.gender=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
+
+    profileStream.listen((value) {
+      this._doctorListResponseModel.profile_pic=value.toString();
+      AppUtill.printAppLog("value::${value.toString()}");
+    });
+
   }
-
-
-
-
 
   updateContactDetails(BuildContext context)
   {
     this._doctorListResponseModel.isEdited=true;
     DBProvider.db.updateNote(this._doctorListResponseModel);
+    DBProvider.db.getNotes().then((value) {
+      AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
+      listStreamCOntroller.add(value);
+    });
+    viewStreamController.add(this._doctorListResponseModel);
     AppUtill.showToast("Record Updated Successfully", context);
     Navigator.pop(context);
-
   }
 
 

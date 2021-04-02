@@ -12,7 +12,9 @@ import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/ContactListItemWidget.dart';
 import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
 import 'package:doctor/utility/AppDialog.dart';
+import 'package:doctor/utility/CustomAlertDialog.dart';
 import 'package:doctor/utility/Loader.dart';
+import 'package:doctor/values/AppPrefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
@@ -66,19 +68,56 @@ class HomeWidget extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text('What We Do'),
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              title: Text('News and Awards'),
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
             ),
+            ListTile(
+              title: Text('About Us'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: Text('Contact Us'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+
+            Padding(padding: EdgeInsets.only(top: 20,right: 20,left: 20),child: CommonUis.getThemeRaisedButton("LOGOUT", () {
+
+              CustomAlertDialog.show(context, AppDialog.DIALOG_INFO, "Are you sure you want to logout ? ",
+                  title: "",buttonText: "Cancel" ,isNegativeButtonVisible: true,
+                  negativeButtonText: "Confirm",
+                  onNegativeButtonClicked: ()
+                  {
+                    AppPrefs.getInstance().setLogout(true);
+                    DBProvider.db.deleteAll();
+                    Navigator.pop(context);
+                    Navigator.of(context).pushNamed('/login');
+                  },
+                  /*onPositiveButtonClicked: ()
+                      {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return SubmitCannedCodesScreen(scannedCodesList);
+                            }));
+                      },*/image: "images/info_icon.svg");
+
+            }),)
+
           ],
         ),
         ),

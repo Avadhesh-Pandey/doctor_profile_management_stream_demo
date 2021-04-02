@@ -287,7 +287,10 @@ class CommonUis
   {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10000.0),
-      child: CachedNetworkImage(
+      child: imageUrl!=null &&imageUrl.contains("data/user")?
+          Image.asset(imageUrl,width: width,height: height,fit: BoxFit.cover,)
+          :
+      CachedNetworkImage(
         height: height,
         width: width,
         fit: BoxFit.fitWidth,

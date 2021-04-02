@@ -40,7 +40,7 @@ class DoctorListResponseModel {
             height: json['height']!=null?json['height']:"",
             weight: json['weight'] !=null?json['weight']:"",
             dob: json['dob']!=null?json['dob']:"",
-            isEdited: json['isEdited'] is int ? json['isEdited']==1?true:false:json['isEdited'],
+            isEdited: json['isEdited'] !=null? json['isEdited'] is int ? json['isEdited']==1?true:false:json['isEdited']:false,
         );
     }
 

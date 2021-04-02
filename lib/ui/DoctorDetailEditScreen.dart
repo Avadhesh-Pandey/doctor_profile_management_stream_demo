@@ -9,6 +9,7 @@ import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
 import 'package:doctor/utility/AppDialog.dart';
 import 'package:doctor/utility/DateTimeConverter.dart';
 import 'package:doctor/utility/Loader.dart';
+import 'package:doctor/utility/MediaPicker.dart';
 import 'package:doctor/values/AppPrefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,6 +59,7 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
       {
         genderDropDownValue=widget._doctor.gender;
       }
+    onGenderChanged(genderDropDownValue);
 
     if(AppUtill.isValid(widget._doctor.blood_group))
     {
@@ -79,6 +81,7 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
   void onGenderChanged(String value){_bloc.genderSink.add(value);}
 
   void onBloodChanged(String value){_bloc.bgSink.add(value);}
+  void onProfileChanged(String value){_bloc.profileSink.add(value);}
 
   void onHeightChanged(){_bloc.heightSink.add(heightController.text);}
   void onWeightChanged(){_bloc.weightSink.add(weightController.text);}
@@ -265,12 +268,30 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
                 ),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Container(padding: EdgeInsets.all(2),
-                    margin: EdgeInsets.only(top: 20),
-                    child: CommonUis.getCircularImageAvatar(widget._doctor.profile_pic, 70, 70),
-                    decoration:BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                  child: GestureDetector(
+                    onTap: ()
+                    {
+                      openImagePicker();
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(padding: EdgeInsets.all(2),
+                          margin: EdgeInsets.only(top: 20),
+                          child: CommonUis.getCircularImageAvatar(widget._doctor.profile_pic, 70, 70),
+                          decoration:BoxDecoration(color: Colors.white, shape: BoxShape.circle),
 
-                  ),),
+                        ),
+                        SizedBox(width: 10,),
+                        CircleAvatar(
+                          radius: 15,
+                          backgroundColor: AppColors.white60,
+                          child: Icon(Icons.edit_outlined,color: AppColors.black,size: 20,),)
+
+                      ],
+                    ),
+                  )),
               ],
             )),
       ),
@@ -394,4 +415,106 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
       });
     }
   }
+
+  Widget getImagePickerWidget(Size size) {
+    AppUtill.printAppLog("getImagePickerWidget");
+    return Container(
+      height: AppUtill.getSize(size.height, 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Select Media Source",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: AppFontSize.size16,
+                          color: AppColors.blackTxt,
+                          fontFamily: AppFonts.AppFont,
+                          fontWeight: AppFontsStyle.BOLD)),
+                ),
+                flex: 1,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.keyboard_arrow_down_outlined),
+                  ),
+                ),
+                flex: 0,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                height: AppUtill.getSize(size.height, 15),
+                width: AppUtill.getSize(size.width, 20),
+                child: GestureDetector(
+                    onTap: () {
+                      MediaPicker(MediaSource.GALLERY).getImage(context,
+                              (imageFile) {
+                            setState(() {
+                              AppUtill.printAppLog("lengthSync=="+imageFile.lengthSync().toString());
+                              if (imageFile != null && imageFile.lengthSync()>0) {
+                                AppUtill.printAppLog("imageFile::${imageFile.path}");
+                                onProfileChanged(imageFile.path);
+                              }       });
+                          }, isCroping: true);
+
+                      Navigator.pop(context);
+                    },
+                    child: SvgPicture.asset(
+                      "images/gallery.svg",
+                      semanticsLabel: 'gallery',
+                    )),
+              ),
+              Container(
+                height: AppUtill.getSize(size.height, 15),
+                width: AppUtill.getSize(size.width, 20),
+                child: GestureDetector(
+                    onTap: () {
+                      MediaPicker(MediaSource.CAMERA).getImage(context,
+                              (imageFile) {
+                            setState(() {
+                              if (imageFile != null && imageFile.lengthSync()>0) {
+                                AppUtill.printAppLog("imageFile::${imageFile.path}");
+                                onProfileChanged(imageFile.path);
+                              }});
+
+                          }, isCroping: true);
+                      Navigator.pop(context);
+                    },
+                    child: SvgPicture.asset(
+                      "images/camera.svg",
+                      semanticsLabel: 'camera',
+                    )),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void openImagePicker() {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return getImagePickerWidget(_size);
+        });
+  }
+
 }

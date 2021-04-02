@@ -77,4 +77,11 @@ class DBProvider {
     return res;
   }
 
+  deleteAll()  async
+  {
+    final db = await database;
+    db.delete("contact");
+  }
+
+
 }

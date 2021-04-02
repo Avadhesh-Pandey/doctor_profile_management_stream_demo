@@ -177,13 +177,20 @@ class OTPWidget extends State<OTPScreen> {
 
                 Padding(
                   padding: EdgeInsets.only(right: 30,left: 30,top: 100,bottom: 0),
-                  child: CommonUis.getThemeRaisedButton("Login", () {
+                  child: checkValue?CommonUis.getThemeRaisedButton("Login", () {
                     if(!checkValue)
                       {
                         AppDialog.showInfoDialog(context, "", "Please agree to the Term Of Use and Privacy Policy");
                         return;
                       }
                     verifyOTP(context);
+                  }):
+                  CommonUis.getThemeRaisedButtonDisabled("Login", () {
+                    if(!checkValue)
+                    {
+                      AppDialog.showInfoDialog(context, "", "Please agree to the Term Of Use and Privacy Policy");
+                      return;
+                    }
                   }),
                 ),
                 Row(

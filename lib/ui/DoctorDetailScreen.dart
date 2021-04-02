@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doctor/blocs/DoctorDetailViewBlock.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
 import 'package:doctor/network/Apis.dart';
 import 'package:doctor/ui/DoctorDetailEditScreen.dart';
@@ -36,14 +37,21 @@ class DoctorDetailScreen extends StatefulWidget {
 
 class DoctorDetailWidget extends State<DoctorDetailScreen> {
   Size _size;
+  DoctorDetailViewBlock _block=DoctorDetailViewBlock();
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _block.viewSink.add(widget._doctor);
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    // _block.viewSink.close();
+    // _block.viewStream.drain();
+    // viewStreamController.close();
     super.dispose();
   }
 
@@ -57,88 +65,95 @@ class DoctorDetailWidget extends State<DoctorDetailScreen> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: SafeArea(
-            child: Stack(
-              children: [
-                Column(
+            child: StreamBuilder(
+              stream: _block.viewStream,
+              initialData: DoctorListResponseModel,
+              builder: (BuildContext context,AsyncSnapshot snapshot)
+              {
+                return Stack(
                   children: [
-                    Container(
-                      color: AppColors.themeColor,
-                      child: Column(
-                        children: [
-                          HeaderWidgetLight("",exitApp: false,),
-                          SizedBox(height: 20,),
-                          Container(
-                            padding: EdgeInsets.only(top: 40),
-                            decoration: CommonUis.getBoxDecorationTopCurved(),
-                            child: Column(
-                              children: [
-                                Align(alignment: Alignment.center,child: CommonUis.getText("${widget._doctor.first_name} ${widget._doctor.last_name}", AppColors.black, AppFontSize.size16,weight: AppFontsStyle.BOLD),),
-                                Padding(padding: EdgeInsets.only(top: 15,bottom: 15),child: SizedBox(width: 150,height: 30,child: CommonUis.getThemeRaisedButton("EDIT PROFILE", () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return DoctorDetailEditScreen(widget._doctor);
-                                      }));
-                                }),),)
-                              ],
-                            ),
+                    Column(
+                      children: [
+                        Container(
+                          color: AppColors.themeColor,
+                          child: Column(
+                            children: [
+                              HeaderWidgetLight("",exitApp: false,),
+                              SizedBox(height: 20,),
+                              Container(
+                                padding: EdgeInsets.only(top: 40),
+                                decoration: CommonUis.getBoxDecorationTopCurved(),
+                                child: Column(
+                                  children: [
+                                    Align(alignment: Alignment.center,child: CommonUis.getText("${snapshot.data.first_name} ${snapshot.data.last_name}", AppColors.black, AppFontSize.size16,weight: AppFontsStyle.BOLD),),
+                                    Padding(padding: EdgeInsets.only(top: 15,bottom: 15),child: SizedBox(width: 150,height: 30,child: CommonUis.getThemeRaisedButton("EDIT PROFILE", () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return DoctorDetailEditScreen(snapshot.data);
+                                          }));
+                                    }),),)
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        color: AppColors.greyBoxLight,
-                        child:ListView(
-                          children: [
-                            SizedBox(height: 10,),
-                            Align(alignment: Alignment.center,child: CommonUis.getText("PERSONAL DETAILS", AppColors.black, AppFontSize.size16,weight: AppFontsStyle.BOLD),),
-                            SizedBox(height: 10,),
-                            getDetailsTiles("FIRST NAME", widget._doctor.first_name),
-                            getDetailsTiles("LAST NAME", widget._doctor.last_name),
-                            getDetailsTiles("GENDER", !AppUtill.isValid(widget._doctor.gender)?"N/A":"${widget._doctor.gender}"),
-                            getDetailsTiles("CONTACT NUMBER", "${widget._doctor.primary_contact_no}"),
-                            Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 10),child: CommonUis.getText("DATE OF BIRTH", AppColors.greyTxt, AppFontSize.size14,weight: AppFontsStyle.BOLD),),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                getSmallTiles("DAY", !AppUtill.isValid(widget._doctor.dob)?"N/A":DateTimeConverter.convert(widget._doctor.dob,outputFormat: "dd",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
-                                getSmallTiles("MONTH", !AppUtill.isValid(widget._doctor.dob)?"N/A":DateTimeConverter.convert(widget._doctor.dob,outputFormat: "MMM",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
-                                getSmallTiles("YEAR", !AppUtill.isValid(widget._doctor.dob)?"N/A":DateTimeConverter.convert(widget._doctor.dob,outputFormat: "yyyy",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                getSmallTiles("BLOOD GROUP", !AppUtill.isValid(widget._doctor.blood_group)?"N/A":"${widget._doctor.blood_group}", Icons.thermostat_rounded),
-                                getSmallTiles("HEIGHT", !AppUtill.isValid(widget._doctor.height)?"N/A":"${widget._doctor.height}", Icons.height),
-                                getSmallTiles("WEIGHT", !AppUtill.isValid(widget._doctor.weight)?"N/A":"${widget._doctor.weight}", Icons.line_weight),
-                              ],
-                            ),
-                            SizedBox(height: 20,),
+                        ),
+                        Flexible(
+                          child: Container(
+                              color: AppColors.greyBoxLight,
+                              child:ListView(
+                                children: [
+                                  SizedBox(height: 10,),
+                                  Align(alignment: Alignment.center,child: CommonUis.getText("PERSONAL DETAILS", AppColors.black, AppFontSize.size16,weight: AppFontsStyle.BOLD),),
+                                  SizedBox(height: 10,),
+                                  getDetailsTiles("FIRST NAME", snapshot.data.first_name),
+                                  getDetailsTiles("LAST NAME", snapshot.data.last_name),
+                                  getDetailsTiles("GENDER", !AppUtill.isValid(snapshot.data.gender)?"N/A":"${snapshot.data.gender}"),
+                                  getDetailsTiles("CONTACT NUMBER", "${snapshot.data.primary_contact_no}"),
+                                  Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 10),child: CommonUis.getText("DATE OF BIRTH", AppColors.greyTxt, AppFontSize.size14,weight: AppFontsStyle.BOLD),),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      getSmallTiles("DAY", !AppUtill.isValid(snapshot.data.dob)?"N/A":DateTimeConverter.convert(snapshot.data.dob,outputFormat: "dd",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
+                                      getSmallTiles("MONTH", !AppUtill.isValid(snapshot.data.dob)?"N/A":DateTimeConverter.convert(snapshot.data.dob,outputFormat: "MMM",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
+                                      getSmallTiles("YEAR", !AppUtill.isValid(snapshot.data.dob)?"N/A":DateTimeConverter.convert(snapshot.data.dob,outputFormat: "yyyy",inputFormat: "yyyy-MM-dd"), Icons.calendar_today),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      getSmallTiles("BLOOD GROUP", !AppUtill.isValid(snapshot.data.blood_group)?"N/A":"${snapshot.data.blood_group}", Icons.thermostat_rounded),
+                                      getSmallTiles("HEIGHT", !AppUtill.isValid(snapshot.data.height)?"N/A":"${snapshot.data.height}", Icons.height),
+                                      getSmallTiles("WEIGHT", !AppUtill.isValid(snapshot.data.weight)?"N/A":"${snapshot.data.weight}", Icons.line_weight),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20,),
 
 
-                          ],
+                                ],
+                              )
+                          ),
                         )
-                      ),
-                    )
 
 
 
 
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(padding: EdgeInsets.all(2),
+                        margin: EdgeInsets.only(top: 20),
+                        child: CommonUis.getCircularImageAvatar(snapshot.data.profile_pic, 70, 70),
+                        decoration:BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+
+                      ),),
                   ],
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(padding: EdgeInsets.all(2),
-                    margin: EdgeInsets.only(top: 20),
-                    child: CommonUis.getCircularImageAvatar(widget._doctor.profile_pic, 70, 70),
-                    decoration:BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-
-                  ),),
-              ],
+                );
+              },
             )),
       ),
     );

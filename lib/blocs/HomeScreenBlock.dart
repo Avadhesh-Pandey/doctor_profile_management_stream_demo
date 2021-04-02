@@ -4,15 +4,17 @@ import 'package:doctor/data/Database.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
 import 'package:doctor/process/ContactProcess.dart';
 import 'package:doctor/ui/DoctorDetailEditScreen.dart';
+import 'package:doctor/utility/AppDialog.dart';
 import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/utility/Loader.dart';
 import 'package:flutter/cupertino.dart';
 
+final listStreamCOntroller=StreamController<List<DoctorListResponseModel>>.broadcast();
+
 class HomeScreenBlock{
 
-  final _listStreamCOntroller=StreamController<List<DoctorListResponseModel>>();
-  StreamSink<List<DoctorListResponseModel>> get listSink =>_listStreamCOntroller.sink;
-  Stream<List<DoctorListResponseModel>> get listStream =>_listStreamCOntroller.stream;
+  StreamSink<List<DoctorListResponseModel>> get listSink =>listStreamCOntroller.sink;
+  Stream<List<DoctorListResponseModel>> get listStream =>listStreamCOntroller.stream;
 
   // final _eventStreamController=StreamController<List<DoctorDetailEditScreen>>();
   // StreamSink<List<DoctorDetailEditScreen>> get eventSink =>_eventStreamController.sink;
@@ -48,9 +50,14 @@ class HomeScreenBlock{
               _doctorList=value;
               listSink.add(_doctorList);
             });
-
           }
-        });
+          else{
+            AppDialog.showErrorDialog(context, "", apiResponse.msg, apiResponse.statusCode,onRetry: ()
+            {
+              getContacts(context);
+            });
+          }
+        },);
       }
     });
   }
