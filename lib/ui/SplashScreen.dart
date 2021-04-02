@@ -73,7 +73,6 @@ class SplashStateFull extends State<SplashScreen> {
   void navigateFurther()
   {
     if (AppPrefs.getInstance().checkLogin()) {
-      AppUtill.printAppLog("userMap::"+AppPrefs.getInstance().getStringData(Keys.USER_DATA));
       Navigator.pop(context);
       Navigator.of(context).pushNamed('/home');
 

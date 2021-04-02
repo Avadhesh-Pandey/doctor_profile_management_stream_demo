@@ -61,7 +61,7 @@ class HomeScreenBlock{
           else{
             AppDialog.showErrorDialog(context, "", apiResponse.msg, apiResponse.statusCode,onRetry: ()
             {
-              // getContacts(context);
+              getContacts(context);
             });
           }
         },);

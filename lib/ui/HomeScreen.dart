@@ -1,32 +1,20 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:doctor/blocs/BlocProvider.dart';
 import 'package:doctor/blocs/HomeScreenBlock.dart';
-import 'package:doctor/blocs/NotesBloc.dart';
 import 'package:doctor/data/Database.dart';
 import 'package:doctor/model/DoctorListResponseModel.dart';
-import 'package:doctor/process/ContactProcess.dart';
 import 'package:doctor/ui/DoctorDetailScreen.dart';
-import 'package:doctor/ui/OTPScreen.dart';
-import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/ContactListItemWidget.dart';
 import 'package:doctor/ui/widgets/CoroselSliderItemWidget.dart';
-import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
 import 'package:doctor/utility/AppDialog.dart';
 import 'package:doctor/utility/CustomAlertDialog.dart';
-import 'package:doctor/utility/Loader.dart';
 import 'package:doctor/values/AppPrefs.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:doctor/network/Apis.dart';
 import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/utility/CommonUIs.dart';
 import 'package:doctor/values/AppSetings.dart';
-import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
 

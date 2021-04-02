@@ -11,6 +11,7 @@ import 'package:doctor/utility/Loader.dart';
 import 'package:flutter/cupertino.dart';
 
 class DoctorDetailEditBLOC{
+  String profilePicture="";
 
   final _fnameStreamController=StreamController<String>();
   StreamSink<String> get fNameSink =>_fnameStreamController.sink;
@@ -86,7 +87,7 @@ class DoctorDetailEditBLOC{
     });
 
     profileStream.listen((value) {
-      this._doctorListResponseModel.profile_pic=value.toString();
+      this.profilePicture=value;
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
@@ -94,6 +95,10 @@ class DoctorDetailEditBLOC{
 
   updateContactDetails(BuildContext context)
   {
+    if(AppUtill.isValid(profilePicture))
+      {
+        this._doctorListResponseModel.profile_pic=profilePicture;
+      }
     this._doctorListResponseModel.isEdited=true;
     DBProvider.db.updateNote(this._doctorListResponseModel);
     DBProvider.db.getNotes().then((value) {
@@ -101,6 +106,9 @@ class DoctorDetailEditBLOC{
       listStreamCOntroller.add(value);
     });
     viewStreamController.add(this._doctorListResponseModel);
+    DBProvider.db.getNoteTopThree().then((value) {
+      carouselSliderStreamController.add(value);
+    });
     AppUtill.showToast("Record Updated Successfully", context);
     Navigator.pop(context);
   }

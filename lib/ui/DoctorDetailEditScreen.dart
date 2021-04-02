@@ -280,7 +280,10 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
                       children: [
                         Container(padding: EdgeInsets.all(2),
                           margin: EdgeInsets.only(top: 20),
-                          child: CommonUis.getCircularImageAvatar(widget._doctor.profile_pic, 70, 70),
+                          child: AppUtill.isValid(_bloc.profilePicture)?
+                          CommonUis.getCircularImageAvatar(_bloc.profilePicture, 70, 70)
+                          :
+                          CommonUis.getCircularImageAvatar(widget._doctor.profile_pic, 70, 70),
                           decoration:BoxDecoration(color: Colors.white, shape: BoxShape.circle),
 
                         ),

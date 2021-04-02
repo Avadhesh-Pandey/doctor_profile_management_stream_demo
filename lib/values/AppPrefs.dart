@@ -45,7 +45,6 @@ class AppPrefs {
         String fcm=getStringData(Keys.FCM_TOCKEN);
         _prefrence.clear();
         _prefrence.setBool(Keys.IS_LOGIN, false);
-        _prefrence.setBool(Keys.HOME_BOTTOM_NAVIGATOR_INFO_GRAPHICS, true);
         _prefrence.setInt(Keys.LANGUAGE_ID, LangID);
         _prefrence.setString(Keys.FCM_TOCKEN, fcm);
 
