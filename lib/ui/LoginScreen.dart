@@ -1,16 +1,10 @@
 import 'dart:io';
 
-import 'package:doctor/ui/OTPScreen.dart';
-import 'package:doctor/ui/widgets/CommonWebView.dart';
+import 'package:doctor/blocs/LoginBloc.dart';
 import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
-import 'package:doctor/utility/AppDialog.dart';
-import 'package:doctor/utility/Loader.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:doctor/network/Apis.dart';
 import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/utility/CommonUIs.dart';
 import 'package:doctor/values/AppSetings.dart';
@@ -26,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class LoginWidget extends State<LoginScreen> {
   Size _size;
   TextEditingController phoneCtrl = TextEditingController();
+  LoginBloc _bloc=LoginBloc();
 
   @override
   void initState() {
@@ -40,6 +35,7 @@ class LoginWidget extends State<LoginScreen> {
 
   void onChange()
   {
+    _bloc.phoneNumberSink.add(phoneCtrl.text.trim());
     if(phoneCtrl.text.trim().length==10)
       {
         // AppUtill.hideKeyboard(context);
@@ -47,7 +43,6 @@ class LoginWidget extends State<LoginScreen> {
 
         });
       }
-
   }
 
   @override
@@ -123,7 +118,7 @@ class LoginWidget extends State<LoginScreen> {
 
             AppUtill.isValidMobileNo(phoneCtrl.text)?
             Padding(padding: EdgeInsets.only(right: 65,left: 65),child: CommonUis.getThemeRaisedButton("Continue", () {
-              verifyAppNumber(context);
+              _bloc.verifyAppNumber(context);
             })):
             Padding(padding: EdgeInsets.only(right: 65,left: 65),child: CommonUis.getThemeRaisedButtonDisabled("Continue", () => null)),
             SizedBox(height: 10,),
@@ -136,58 +131,6 @@ class LoginWidget extends State<LoginScreen> {
       Navigator.pop(context);
       exit(0);
     });
-  }
-
-  verifyAppNumber(BuildContext context)
-  async {
-    Loader.showLoader(context);
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await auth.verifyPhoneNumber(
-      phoneNumber: '+91${phoneCtrl.text}',
-      /*verificationCompleted: (PhoneAuthCredential credential) async{
-        //only for android
-
-        await auth.signInWithCredential(credential);
-        AppUtill.printAppLog("verifyPhoneNumber::verificationCompleted");
-
-      },*/
-      verificationFailed: (FirebaseAuthException e) {
-        Loader.hideLoader();
-        if (e.code == 'invalid-phone-number') {
-          AppDialog.showErrorDialog(context, "", "The provided phone number is not valid.", 0);
-          print('verifyPhoneNumber::The provided phone number is not valid.');
-        }
-        else{
-          AppDialog.showErrorDialog(context, "", "${e.message}", 0);
-        }
-        String status = '${e.message}';
-        print('verifyPhoneNumber::${e.message}');
-
-      },
-      codeSent: (String verificationId, int resendToken) async {
-        Loader.hideLoader();
-        Navigator.pop(context);
-        AppUtill.printAppLog("verifyPhoneNumber::codeSent");
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) {
-              return OTPScreen(phoneCtrl.text,verificationId,auth);
-            }));
-
-        /*String smsCode = 'xxxx';
-
-        // Create a PhoneAuthCredential with the code
-        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
-
-        AppUtill.printAppLog("verifyPhoneNumber::codeSent");
-        // Sign the user in (or link) with the credential
-        await auth.signInWithCredential(phoneAuthCredential);*/
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        Loader.hideLoader();
-        AppUtill.printAppLog("verifyPhoneNumber::codeAutoRetrievalTimeout:: $verificationId");
-      },
-    );
   }
 }
 

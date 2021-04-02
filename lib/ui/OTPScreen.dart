@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doctor/blocs/OTPBloc.dart';
 import 'package:doctor/network/Apis.dart';
 import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
@@ -36,13 +37,21 @@ class OTPWidget extends State<OTPScreen> {
   Timer _timer;
   bool checkValue = true;
   TextEditingController phoneCtrl = TextEditingController();
+  OTPBloc _bloc=OTPBloc();
 
   @override
   void initState() {
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       if (this.mounted) setState(() {});
     });
+
+    phoneCtrl.addListener(() {onValueChanged();});
     super.initState();
+  }
+
+  onValueChanged()
+  {
+    _bloc.phoneNumberSink.add(phoneCtrl.text);
   }
 
   @override
@@ -183,7 +192,7 @@ class OTPWidget extends State<OTPScreen> {
                         AppDialog.showInfoDialog(context, "", "Please agree to the Term Of Use and Privacy Policy");
                         return;
                       }
-                    verifyOTP(context);
+                    _bloc.verifyOTP(context, widget.auth, widget.authVerificationId);
                   }):
                   CommonUis.getThemeRaisedButtonDisabled("Login", () {
                     if(!checkValue)
@@ -304,38 +313,5 @@ class OTPWidget extends State<OTPScreen> {
             )),
       ),
     );
-  }
-
-  verifyOTP(BuildContext context)
-  async {
-    Loader.showLoader(context);
-
-    String smsCode = phoneCtrl.text;
-    
-    // Create a PhoneAuthCredential with the code
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: widget.authVerificationId, smsCode: smsCode);
-
-    // Sign the user in (or link) with the credential
-    await widget.auth.signInWithCredential(phoneAuthCredential).catchError((error) {
-      Loader.hideLoader();
-      AppDialog.showErrorDialog(context, "", "Something has gone wrong, please try later", 0);
-    }).then((value) {
-      Loader.hideLoader();
-      if(value!=null && value.user!=null)
-      {
-        // AppUtill.printAppLog("${value.user.displayName} ${AppUtill.printClass(value.user)}");
-        AppUtill.showToast("Authentication successful", context);
-        AppPrefs.getInstance().setLogin();
-        Navigator.of(context).pop();
-        Navigator.of(context).pushNamed('/home');
-
-      }
-      else {
-        AppDialog.showErrorDialog(context, "", "Invalid code/invalid authentication", 0);
-        // AppUtill.printAppLog("ERROR:: ${AppUtill.printClass(value.user)}");
-
-      }
-    }
-      );
   }
 }
