@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctor/blocs/BlocProvider.dart';
 import 'package:doctor/blocs/HomeScreenBlock.dart';
 import 'package:doctor/blocs/NotesBloc.dart';
@@ -10,6 +11,7 @@ import 'package:doctor/ui/DoctorDetailScreen.dart';
 import 'package:doctor/ui/OTPScreen.dart';
 import 'package:doctor/ui/widgets/CommonWebView.dart';
 import 'package:doctor/ui/widgets/ContactListItemWidget.dart';
+import 'package:doctor/ui/widgets/CoroselSliderItemWidget.dart';
 import 'package:doctor/ui/widgets/HeaderWidgetLight.dart';
 import 'package:doctor/utility/AppDialog.dart';
 import 'package:doctor/utility/CustomAlertDialog.dart';
@@ -138,23 +140,79 @@ class HomeWidget extends State<HomeScreen> {
             ],
           ),
         ),
-        body:StreamBuilder(
-          stream: _homeScreenBlock.listStream,
-          initialData: [],
-          builder: (BuildContext context,AsyncSnapshot snapshot)
+        body:LayoutBuilder(builder: (context,constraints)
           {
-            return ListView.separated(itemBuilder: (_, index){
-              return ContactListItemWidget(snapshot.data[index],onSelected: ()
-              {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return DoctorDetailScreen(snapshot.data[index]);
-                    }));
-              },);
-            }, separatorBuilder: (context, index) => Divider(
-            ), itemCount: snapshot.data.length);
-          },
-        )
+            return Column(
+              children: [
+                StreamBuilder(
+                  stream: _homeScreenBlock.carouselSliderStream,
+                  initialData: null,
+                  builder: (BuildContext context,AsyncSnapshot snap)
+                  {
+                    List<DoctorListResponseModel> _list=snap.data;
+                    return snap.data==null?SizedBox():
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 10),
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          height: AppUtill.getSize(_size.height, 20),
+                          aspectRatio: 16 / 9,
+                          viewportFraction: 0.8,
+                          initialPage: 0,
+                          enableInfiniteScroll: true,
+                          reverse: false,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                          Duration(milliseconds: 800),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+
+                          },
+                          scrollDirection: Axis.horizontal,
+                        ),
+                        items: _list.map((i) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return GestureDetector(
+                                child: ClipRRect(
+//                                  borderRadius: BorderRadius.circular(20),
+                                  child: CoroselSliderItemWidget(i),
+                                ),
+                                onTap: () {
+                                  // gotoBannersNavigationURL(i);
+                                },
+                              );
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                ),
+                StreamBuilder(
+                  stream: _homeScreenBlock.listStream,
+                  initialData: [],
+                  builder: (BuildContext context,AsyncSnapshot snapshot)
+                  {
+                    AppUtill.printAppLog("DBProvider.db.getNotes.length3:: ${snapshot.data.length}");
+                    return Flexible(child: ListView.separated(
+                        itemBuilder: (_, index){
+                      return ContactListItemWidget(snapshot.data[index],onSelected: ()
+                      {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return DoctorDetailScreen(snapshot.data[index]);
+                            }));
+                      },);
+                    }, separatorBuilder: (context, index) => Divider(
+                    ), itemCount: snapshot.data.length));
+                  },
+                )
+              ],
+            );
+          },)
       ),
 
     ), onWillPop: (){

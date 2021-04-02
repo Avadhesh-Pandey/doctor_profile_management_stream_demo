@@ -70,6 +70,14 @@ class DBProvider {
     return notes;
   }
 
+  Future<List<DoctorListResponseModel>> getNoteTopThree() async {
+    final db = await database;
+    var reso = await db.query('contact',orderBy: "rating DESC",limit: 3);
+    List<DoctorListResponseModel> notes = reso.isNotEmpty ? reso.map((note) => DoctorListResponseModel.fromJson(note)).toList() : null;
+
+    return notes;
+  }
+
   updateNote(DoctorListResponseModel note) async {
     final db = await database;
     var res = await db.update('contact', note.toJson(), where: 'id = ?', whereArgs: [note.id]);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/values/AppSetings.dart';
@@ -288,7 +290,7 @@ class CommonUis
     return ClipRRect(
       borderRadius: BorderRadius.circular(10000.0),
       child: imageUrl!=null &&imageUrl.contains("data/user")?
-          Image.asset(imageUrl,width: width,height: height,fit: BoxFit.cover,)
+          Image.file(File(imageUrl),width: width,height: height,fit: BoxFit.fill,)
           :
       CachedNetworkImage(
         height: height,

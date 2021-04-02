@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -101,6 +102,9 @@ class AppUtill {
   static Widget getImageView(String url, BoxFit fit,
       {double height = 30, Color color}) {
     return isValid(url)?
+    url.contains("data/user")?
+    Image.file(File(url),height: height,fit: BoxFit.fill,)
+        :
     CachedNetworkImage(
       imageUrl: url,
       placeholder: (context, url) =>

@@ -81,6 +81,7 @@ class DoctorDetailWidget extends State<DoctorDetailEditScreen> {
   void onGenderChanged(String value){_bloc.genderSink.add(value);}
 
   void onBloodChanged(String value){_bloc.bgSink.add(value);}
+
   void onProfileChanged(String value){_bloc.profileSink.add(value);}
 
   void onHeightChanged(){_bloc.heightSink.add(heightController.text);}

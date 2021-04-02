@@ -10,15 +10,16 @@ import 'package:doctor/utility/Loader.dart';
 import 'package:flutter/cupertino.dart';
 
 final listStreamCOntroller=StreamController<List<DoctorListResponseModel>>.broadcast();
+final carouselSliderStreamController=StreamController<List<DoctorListResponseModel>>.broadcast();
 
 class HomeScreenBlock{
 
   StreamSink<List<DoctorListResponseModel>> get listSink =>listStreamCOntroller.sink;
   Stream<List<DoctorListResponseModel>> get listStream =>listStreamCOntroller.stream;
-
-  // final _eventStreamController=StreamController<List<DoctorDetailEditScreen>>();
-  // StreamSink<List<DoctorDetailEditScreen>> get eventSink =>_eventStreamController.sink;
-  // Stream<List<DoctorDetailEditScreen>> get eventStream =>_eventStreamController.stream;
+  
+  
+  StreamSink<List<DoctorListResponseModel>> get carouselSliderSink =>carouselSliderStreamController.sink;
+  Stream<List<DoctorListResponseModel>> get carouselSliderStream =>carouselSliderStreamController.stream;
 
   getContacts(BuildContext context)
   {
@@ -27,6 +28,8 @@ class HomeScreenBlock{
       {
         AppUtill.showToast("Data Retrieved from Local Database", context);
         AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
+        getTopThree();
+
         listSink.add(value);
       }
       else
@@ -49,16 +52,30 @@ class HomeScreenBlock{
               AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
               _doctorList=value;
               listSink.add(_doctorList);
+
             });
+
+            getTopThree();
+
           }
           else{
             AppDialog.showErrorDialog(context, "", apiResponse.msg, apiResponse.statusCode,onRetry: ()
             {
-              getContacts(context);
+              // getContacts(context);
             });
           }
         },);
       }
+    });
+  }
+
+  getTopThree()
+  {
+    DBProvider.db.getNoteTopThree().then((valuee)
+    {
+      carouselSliderSink.add(valuee);
+      AppUtill.printAppLog("DBProvider.db.getNotes.length2:: ${valuee.length}");
+
     });
   }
 

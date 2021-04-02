@@ -45,12 +45,10 @@ dependencies:
   flutter_webview_plugin: ^0.3.11
   firebase_auth: ^1.0.1
   firebase_core: ^1.0.2
-#  sqflite: ^2.0.0+3
   path_provider: ^2.0.1
   flutter_bloc: ^7.0.0
   sqflite: ^1.0.0
-#  path_provider: ^0.5.0+1
-
+  carousel_slider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
