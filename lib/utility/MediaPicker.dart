@@ -15,43 +15,37 @@ class MediaPicker {
 
   MediaPicker(this._mediaSource);
 
-  getImage(context, inner(File imageFile), {isCroping = false}) async {
+  getImage(context, inner(File? imageFile), {isCroping = false}) async {
     try {
-      File imageFile;
-      final picker=ImagePicker();
+      File? imageFile;
+      final picker = ImagePicker();
 
       if (_mediaSource == MediaSource.GALLERY) {
-        final pickedFile=await picker.getImage(source: ImageSource.gallery);
+        final pickedFile = await picker.getImage(source: ImageSource.gallery);
         // imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-        if(pickedFile!=null)
-        {
-          imageFile=File(pickedFile.path);
-        }
-        else{
+        if (pickedFile != null) {
+          imageFile = File(pickedFile.path);
+        } else {
           AppUtill.printAppLog("pickedFile==null");
         }
       } else if (_mediaSource == MediaSource.CAMERA) {
-        final pickedFile=await picker.getImage(source: ImageSource.camera);
+        final pickedFile = await picker.getImage(source: ImageSource.camera);
         // imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
-        if(pickedFile!=null)
-        {
-          imageFile=File(pickedFile.path);
-        }
-        else{
+        if (pickedFile != null) {
+          imageFile = File(pickedFile.path);
+        } else {
           AppUtill.printAppLog("pickedFile==null");
         }
       }
 
-      if (imageFile!=null && isCroping) {
-        imageFile =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      if (imageFile != null && isCroping) {
+        imageFile = await (Navigator.push(context,
+            MaterialPageRoute(builder: (context) {
           return ImageCroping(imageFile);
-        }));
-
+        })) as Future<File>);
       }
 
       inner(imageFile);
-
     } catch (e) {
       print(e);
     }
@@ -59,7 +53,7 @@ class MediaPicker {
 }
 
 class ImageCroping extends StatefulWidget {
-  File _sample;
+  File? _sample;
 
   ImageCroping(this._sample);
 
@@ -87,7 +81,7 @@ class ImageCropWidget extends State<ImageCroping> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Crop.file(widget._sample, key: cropKey),
+          child: Crop.file(widget._sample!, key: cropKey),
         ),
         Container(
           padding: const EdgeInsets.only(top: 20.0),
@@ -100,7 +94,7 @@ class ImageCropWidget extends State<ImageCroping> {
                   "crop",
                   style: Theme.of(context)
                       .textTheme
-                      .button
+                      .button!
                       .copyWith(color: AppColors.white),
                 ),
                 onPressed: () => _cropImage(),
@@ -113,8 +107,8 @@ class ImageCropWidget extends State<ImageCroping> {
   }
 
   Future<void> _cropImage() async {
-    final scale = cropKey.currentState.scale;
-    final area = cropKey.currentState.area;
+    final scale = cropKey.currentState!.scale;
+    final area = cropKey.currentState!.area;
     if (area == null) {
       // cannot crop, widget is not setup
       return;
@@ -123,7 +117,7 @@ class ImageCropWidget extends State<ImageCroping> {
     // scale up to use maximum possible number of pixels
     // this will sample image in higher resolution to make cropped image larger
     final sample = await ImageCrop.sampleImage(
-      file: widget._sample,
+      file: widget._sample!,
       preferredSize: (2000 / scale).round(),
     );
 //

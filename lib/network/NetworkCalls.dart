@@ -13,7 +13,7 @@ import 'package:dio/dio.dart';
 enum RequestType { POST, GET, FORM }
 
 class NetworkCalls {
-  Dio _dio;
+  late Dio _dio;
 
   NetworkCalls({baseUrl = Apis.BASE_URL}) {
     _dio = new Dio(BaseOptions(
@@ -22,7 +22,7 @@ class NetworkCalls {
       connectTimeout: 5000,
       receiveTimeout: 3000,
     ));
-    _dio.options.headers["Authorization"] = "Bearer ${AppPrefs.getInstance().getStringData(Keys.AUTH_TOCKEN)}";
+    _dio.options.headers["Authorization"] = "Bearer ${AppPrefs.getInstance()!.getStringData(Keys.AUTH_TOCKEN)}";
   }
 
   Future forRequest(void ApiResult(ApiResponse apiResponce), url, requestType,
@@ -31,7 +31,7 @@ class NetworkCalls {
     if (RequestParam != null && requestType != RequestType.FORM)
       AppUtill.printAppLog('request data = ${jsonEncode(RequestParam)}');
 
-    Response response;
+    late Response response;
 
     try{
       if (requestType == RequestType.POST) {
@@ -62,10 +62,10 @@ class NetworkCalls {
         ApiResponse apiResponse;
         apiResponse=new ApiResponse.blank();
         apiResponse.status=false;
-        print(e.response.headers);
+        print(e.response!.headers);
         // print(e.response.request);
-        print(e.response.statusCode);
-        apiResponse.statusCode=e.response.statusCode;
+        print(e.response!.statusCode);
+        apiResponse.statusCode=e.response!.statusCode;
         ApiResult(apiResponse);
 
       }
@@ -113,7 +113,7 @@ class NetworkCalls {
     AppUtill.printAppLog('request url = ${url}');
 
     final mimeTypeData =
-        lookupMimeType(fileToUpload.path, headerBytes: [0xFF, 0xD8]).split('/');
+        lookupMimeType(fileToUpload.path, headerBytes: [0xFF, 0xD8])!.split('/');
     // Intilize the multipart request
     final imageUploadRequest = http.MultipartRequest('POST', Uri.parse(url));
     // Attach the file in the request
@@ -129,12 +129,12 @@ class NetworkCalls {
 
       AppUtill.printAppLog("response status == ${response.statusCode}");
 //      AppUtill.printAppLog("response result == ${jsonEncode(response.body)}");
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Map<String, dynamic>? responseData = json.decode(response.body);
 
       AppUtill.printAppLog("response result == ${jsonEncode(responseData)}");
 
       if (response.statusCode == 200) {
-        ApiResponse apiResponce = ApiResponse.fromJson(responseData);
+        ApiResponse apiResponce = ApiResponse.fromJson(responseData!);
         ApiResult(apiResponce);
       }
 

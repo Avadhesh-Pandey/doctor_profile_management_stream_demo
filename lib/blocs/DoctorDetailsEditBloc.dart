@@ -34,13 +34,13 @@ class DoctorDetailEditBLOC{
   Stream<String> get weightStream =>_weightStreamController.stream;
 
 
-  final _bgStreamController=StreamController<String>();
-  StreamSink<String> get bgSink =>_bgStreamController.sink;
-  Stream<String> get bgStream =>_bgStreamController.stream;
+  final _bgStreamController=StreamController<String?>();
+  StreamSink<String?> get bgSink =>_bgStreamController.sink;
+  Stream<String?> get bgStream =>_bgStreamController.stream;
 
-  final _genderStreamController=StreamController<String>();
-  StreamSink<String> get genderSink =>_genderStreamController.sink;
-  Stream<String> get genderStream =>_genderStreamController.stream;
+  final _genderStreamController=StreamController<String?>();
+  StreamSink<String?> get genderSink =>_genderStreamController.sink;
+  Stream<String?> get genderStream =>_genderStreamController.stream;
 
 
   final _profileStreamController=StreamController<String>();
@@ -48,41 +48,41 @@ class DoctorDetailEditBLOC{
   Stream<String> get profileStream =>_profileStreamController.stream;
 
 
-  DoctorListResponseModel _doctorListResponseModel;
+  DoctorListResponseModel? _doctorListResponseModel;
   DoctorDetailEditBLOC(this._doctorListResponseModel)
   {
     fNameStream.listen((value) {
-      this._doctorListResponseModel.first_name=value.toString();
+      this._doctorListResponseModel!.first_name=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     lNameStream.listen((value) {
-      this._doctorListResponseModel.last_name=value.toString();
+      this._doctorListResponseModel!.last_name=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     dobStream.listen((value) {
-      this._doctorListResponseModel.dob=value.toString();
+      this._doctorListResponseModel!.dob=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     heightStream.listen((value) {
-      this._doctorListResponseModel.height=value.toString();
+      this._doctorListResponseModel!.height=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     weightStream.listen((value) {
-      this._doctorListResponseModel.weight=value.toString();
+      this._doctorListResponseModel!.weight=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     bgStream.listen((value) {
-      this._doctorListResponseModel.blood_group=value.toString();
+      this._doctorListResponseModel!.blood_group=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
     genderStream.listen((value) {
-      this._doctorListResponseModel.gender=value.toString();
+      this._doctorListResponseModel!.gender=value.toString();
       AppUtill.printAppLog("value::${value.toString()}");
     });
 
@@ -97,12 +97,12 @@ class DoctorDetailEditBLOC{
   {
     if(AppUtill.isValid(profilePicture))
       {
-        this._doctorListResponseModel.profile_pic=profilePicture;
+        this._doctorListResponseModel!.profile_pic=profilePicture;
       }
-    this._doctorListResponseModel.isEdited=true;
-    DBProvider.db.updateNote(this._doctorListResponseModel);
+    this._doctorListResponseModel!.isEdited=true;
+    DBProvider.db.updateNote(this._doctorListResponseModel!);
     DBProvider.db.getNotes().then((value) {
-      AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
+      AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value!.length}");
       listStreamCOntroller.add(value);
     });
     viewStreamController.add(this._doctorListResponseModel);

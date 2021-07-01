@@ -21,7 +21,7 @@ class CoroselSliderItemWidget extends StatefulWidget {
 }
 
 class ContactWidget extends State<CoroselSliderItemWidget> {
-  Size _size;
+  late Size _size;
 
   @override
   Widget build(BuildContext context) {

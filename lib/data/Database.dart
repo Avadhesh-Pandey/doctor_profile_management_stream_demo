@@ -9,9 +9,9 @@ class DBProvider {
   DBProvider._();
 
   static final DBProvider db = DBProvider._();
-  Database _database;
+  Database? _database;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) {
       return _database;
     }
@@ -27,8 +27,8 @@ class DBProvider {
     Directory documentsDir = await getApplicationDocumentsDirectory();
     String path = join(documentsDir.path, 'app.db');
 
-    return await openDatabase(path, version: 1, onOpen: (db) async {
-    }, onCreate: (Database db, int version) async {
+    return await openDatabase(path, version: 1, onOpen: (db) async {},
+        onCreate: (Database db, int version) async {
       // Create the note table
       await db.execute('''
                 CREATE TABLE contact(
@@ -56,40 +56,42 @@ class DBProvider {
   }
 
   newNote(DoctorListResponseModel note) async {
-    final db = await database;
+    final db = await (database as Future<Database>);
     var res = await db.insert('contact', note.toJson());
 
     return res;
   }
 
-  Future<List<DoctorListResponseModel>> getNotes() async {
-    final db = await database;
-    var res = await db.query('contact',orderBy: "rating DESC");
-    List<DoctorListResponseModel> notes = res.isNotEmpty ? res.map((note) => DoctorListResponseModel.fromJson(note)).toList() : null;
+  Future<List<DoctorListResponseModel>?> getNotes() async {
+    final db = await (database as Future<Database>);
+    var res = await db.query('contact', orderBy: "rating DESC");
+    List<DoctorListResponseModel>? notes = res.isNotEmpty
+        ? res.map((note) => DoctorListResponseModel.fromJson(note)).toList()
+        : null;
 
     return notes;
   }
 
-  Future<List<DoctorListResponseModel>> getNoteTopThree() async {
-    final db = await database;
-    var reso = await db.query('contact',orderBy: "rating DESC",limit: 3);
-    List<DoctorListResponseModel> notes = reso.isNotEmpty ? reso.map((note) => DoctorListResponseModel.fromJson(note)).toList() : null;
+  Future<List<DoctorListResponseModel>?> getNoteTopThree() async {
+    final db = await (database as Future<Database>);
+    var reso = await db.query('contact', orderBy: "rating DESC", limit: 3);
+    List<DoctorListResponseModel>? notes = reso.isNotEmpty
+        ? reso.map((note) => DoctorListResponseModel.fromJson(note)).toList()
+        : null;
 
     return notes;
   }
 
   updateNote(DoctorListResponseModel note) async {
-    final db = await database;
-    var res = await db.update('contact', note.toJson(), where: 'id = ?', whereArgs: [note.id]);
+    final db = await (database as Future<Database>);
+    var res = await db.update('contact', note.toJson(),
+        where: 'id = ?', whereArgs: [note.id]);
 
     return res;
   }
 
-  deleteAll()  async
-  {
-    final db = await database;
+  deleteAll() async {
+    final db = await (database as Future<Database>);
     db.delete("contact");
   }
-
-
 }

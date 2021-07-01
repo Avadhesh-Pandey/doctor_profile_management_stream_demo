@@ -1,7 +1,7 @@
 class ApiResponse {
-  bool status;
-  int statusCode;
-  String msg;
+  bool? status;
+  int? statusCode;
+  String? msg;
   dynamic raw;
 
 

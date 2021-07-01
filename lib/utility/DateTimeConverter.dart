@@ -5,7 +5,7 @@ import 'AppUtill.dart';
 
 class DateTimeConverter{
 
-  static String convert(String stringDate,{String outputFormat,String inputFormat})
+  static String convert(String? stringDate,{String? outputFormat,String? inputFormat})
   {
     if(stringDate!=null)
       {
@@ -26,7 +26,7 @@ class DateTimeConverter{
 
   }
 
-  static DateTime parseDate(String stringDate,String inputFormat)
+  static DateTime parseDate(String stringDate,String? inputFormat)
   {
     if(AppUtill.isValid(inputFormat))
       {

@@ -7,9 +7,9 @@ import 'package:doctor/values/AppSetings.dart';
 import 'CommonUIs.dart';
 
 class RetryDialog extends StatelessWidget {
-  final Function() onPositiveButtonClicked;
+  final Function()? onPositiveButtonClicked;
 
-  static void show(BuildContext context,Map<String,dynamic> notificationMap,{String image="images/notification_bell.svg",String buttonText="",Function() onPositiveButtonClicked,Function() onNegativeButtonClicked,bool isNegativeButtonVisible=false,String negativeButtonText=""}){
+  static void show(BuildContext context,Map<String,dynamic> notificationMap,{String image="images/notification_bell.svg",String buttonText="",Function()? onPositiveButtonClicked,Function()? onNegativeButtonClicked,bool isNegativeButtonVisible=false,String negativeButtonText=""}){
 
     if(buttonText.length==0)
     {
@@ -97,7 +97,7 @@ class RetryDialog extends StatelessWidget {
             }
             else
             {
-              onPositiveButtonClicked();
+              onPositiveButtonClicked!();
             }
 
           },height: 45),

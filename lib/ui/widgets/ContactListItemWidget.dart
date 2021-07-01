@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:doctor/values/AppSetings.dart';
 
 class ContactListItemWidget extends StatefulWidget {
-  DoctorListResponseModel doctor;
-  final Function() onSelected;
+  DoctorListResponseModel? doctor;
+  final Function()? onSelected;
 
   ContactListItemWidget(this.doctor,{this.onSelected});
 
@@ -19,7 +19,7 @@ class ContactListItemWidget extends StatefulWidget {
 }
 
 class ContactWidget extends State<ContactListItemWidget> {
-  Size _size;
+  Size? _size;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ContactWidget extends State<ContactListItemWidget> {
     return GestureDetector(
       onTap: ()
       {
-        widget.onSelected();
+        widget.onSelected!();
       },
       child: Container(
           margin: EdgeInsets.all(10),
@@ -39,7 +39,7 @@ class ContactWidget extends State<ContactListItemWidget> {
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(10000.0),
-                      child: CommonUis.getCircularImageAvatar(widget.doctor.profile_pic, 50, 50)
+                      child: CommonUis.getCircularImageAvatar(widget.doctor!.profile_pic, 50, 50)
                   ),
                   SizedBox(width: 10,),
                   Expanded(child:
@@ -47,9 +47,9 @@ class ContactWidget extends State<ContactListItemWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CommonUis.getText("${widget.doctor.first_name} ${widget.doctor.last_name}", AppColors.themeColorDark, AppFontSize.size16,weight: AppFontsStyle.BOLD,alignment: TextAlign.start),
-                      CommonUis.getText("${widget.doctor.specialization}", AppColors.themeColorDark, AppFontSize.size16,weight: AppFontsStyle.REGULAR),
-                      CommonUis.getText("${widget.doctor.description}", AppColors.black, AppFontSize.size14,weight: AppFontsStyle.REGULAR,maxLines: 2),
+                      CommonUis.getText("${widget.doctor!.first_name} ${widget.doctor!.last_name}", AppColors.themeColorDark, AppFontSize.size16,weight: AppFontsStyle.BOLD,alignment: TextAlign.start),
+                      CommonUis.getText("${widget.doctor!.specialization}", AppColors.themeColorDark, AppFontSize.size16,weight: AppFontsStyle.REGULAR),
+                      CommonUis.getText("${widget.doctor!.description}", AppColors.black, AppFontSize.size14,weight: AppFontsStyle.REGULAR,maxLines: 2),
                     ],
                   )),
                   SizedBox(width: 10,),
@@ -57,7 +57,7 @@ class ContactWidget extends State<ContactListItemWidget> {
                 ],
               ),
               SizedBox(height: 5,),
-              widget.doctor.isEdited?
+              widget.doctor!.isEdited!?
               Align(alignment: Alignment.bottomRight,child: CommonUis.getText("EDITED", AppColors.redTxt, AppFontSize.size14,weight: AppFontsStyle.REGULAR),)
               :
               SizedBox(height: 0,),

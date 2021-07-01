@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 
 class LoginWidget extends State<LoginScreen> {
-  Size _size;
+  Size? _size;
   TextEditingController phoneCtrl = TextEditingController();
   LoginBloc _bloc=LoginBloc();
 
@@ -130,7 +130,7 @@ class LoginWidget extends State<LoginScreen> {
     ), onWillPop: (){
       Navigator.pop(context);
       exit(0);
-    });
+    } as Future<bool> Function()?);
   }
 }
 

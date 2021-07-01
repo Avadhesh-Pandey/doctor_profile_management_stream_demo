@@ -6,7 +6,7 @@ import 'package:doctor/values/AppSetings.dart';
 
 class CommonUis
 {
-  static Widget getText(String text,Color color, double size,{String font=AppFonts.AppFont,TextAlign alignment = TextAlign.start,int maxLines,FontWeight weight = FontWeight.normal,bool addAsterisk=false}) {
+  static Widget getText(String text,Color color, double size,{String font=AppFonts.AppFont,TextAlign alignment = TextAlign.start,int? maxLines,FontWeight weight = FontWeight.normal,bool addAsterisk=false}) {
     return Text(
       "$text${addAsterisk?"\u002A":""}",
       maxLines: maxLines,
@@ -146,7 +146,7 @@ class CommonUis
     );
   }
 
-  static Widget getButton(String text,{Color textColor = AppColors.textColor,String font = AppFonts.AppFont,double fontSize = 16.0,FontWeight fontWeight = FontWeight.normal,Function onButtonPressed,double height = 45.0,double width = double.infinity,Color color = AppColors.themeColor}){
+  static Widget getButton(String text,{Color textColor = AppColors.textColor,String font = AppFonts.AppFont,double fontSize = 16.0,FontWeight fontWeight = FontWeight.normal,Function? onButtonPressed,double height = 45.0,double width = double.infinity,Color color = AppColors.themeColor}){
     return Container(
       width: width,
       height: height,
@@ -157,7 +157,7 @@ class CommonUis
 
       child: RaisedButton(
           onPressed: () {
-            onButtonPressed();
+            onButtonPressed!();
           },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(height/2)
@@ -168,7 +168,7 @@ class CommonUis
   }
 
 
-  static Container getCommonTextField({String hint="",String text,TextEditingController controller,TextInputType textInputType=TextInputType.text,int maxLength=null,textCapitalization=TextCapitalization.words,double marginTop=10,bool readOnly=false})
+  static Container getCommonTextField({String hint="",String? text,TextEditingController? controller,TextInputType textInputType=TextInputType.text,int? maxLength=null,textCapitalization=TextCapitalization.words,double marginTop=10,bool readOnly=false})
   {
     return Container(
       alignment: Alignment.center,
@@ -220,7 +220,7 @@ class CommonUis
     );
   }
 
-  static Container getCommonTextFieldWithHeader({String hint="",String text,TextEditingController controller,TextInputType textInputType=TextInputType.text,int maxLength=null,textCapitalization=TextCapitalization.words})
+  static Container getCommonTextFieldWithHeader({String hint="",String? text,TextEditingController? controller,TextInputType textInputType=TextInputType.text,int? maxLength=null,textCapitalization=TextCapitalization.words})
   {
     return Container(
       alignment: Alignment.center,
@@ -285,7 +285,7 @@ class CommonUis
     );
   }
 
-  static getCircularImageAvatar(String imageUrl,double height,double width,{IconData icon=Icons.person})
+  static getCircularImageAvatar(String? imageUrl,double height,double width,{IconData icon=Icons.person})
   {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10000.0),

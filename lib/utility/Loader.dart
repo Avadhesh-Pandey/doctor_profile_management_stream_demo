@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'CommonUIs.dart';
 class Loader{
 
-  static OverlayEntry loader ;
+  static OverlayEntry? loader ;
 
   static showLoader(BuildContext context){
     if (loader != null){ // Loader is already running
       return;
     }
-    OverlayState overlayState = Overlay.of(context);
+    OverlayState overlayState = Overlay.of(context)!;
     loader = OverlayEntry(builder: (context) => Material(
       type: MaterialType.transparency,
       child: Center(
@@ -37,11 +37,11 @@ class Loader{
         ),
       ),
     ));
-    overlayState.insert(loader);
+    overlayState.insert(loader!);
   }
   static hideLoader(){
     if (loader != null){
-      loader.remove();
+      loader!.remove();
       loader = null;
     }
   }
