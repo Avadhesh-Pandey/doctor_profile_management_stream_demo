@@ -9,74 +9,81 @@ import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/utility/Loader.dart';
 import 'package:flutter/cupertino.dart';
 
-final listStreamCOntroller=StreamController<List<DoctorListResponseModel>>.broadcast();
-final carouselSliderStreamController=StreamController<List<DoctorListResponseModel>>.broadcast();
+final listStreamCOntroller =
+    StreamController<List<DoctorListResponseModel>?>.broadcast();
+final carouselSliderStreamController =
+    StreamController<List<DoctorListResponseModel>?>.broadcast();
 
-class HomeScreenBlock{
+class HomeScreenBlock {
+  StreamSink<List<DoctorListResponseModel>?> get listSink =>
+      listStreamCOntroller.sink;
+  Stream<List<DoctorListResponseModel>?> get listStream =>
+      listStreamCOntroller.stream;
 
-  StreamSink<List<DoctorListResponseModel>> get listSink =>listStreamCOntroller.sink;
-  Stream<List<DoctorListResponseModel>> get listStream =>listStreamCOntroller.stream;
-  
-  
-  StreamSink<List<DoctorListResponseModel>> get carouselSliderSink =>carouselSliderStreamController.sink;
-  Stream<List<DoctorListResponseModel>> get carouselSliderStream =>carouselSliderStreamController.stream;
+  StreamSink<List<DoctorListResponseModel>?> get carouselSliderSink =>
+      carouselSliderStreamController.sink;
+  Stream<List<DoctorListResponseModel>?> get carouselSliderStream =>
+      carouselSliderStreamController.stream;
 
-  getContacts(BuildContext context)
-  {
+  getContacts(BuildContext context) {
     DBProvider.db.getNotes().then((value) {
-      if(value!=null && value.length>0)
-      {
+      if (value != null && value.length > 0) {
         AppUtill.showToast("Data Retrieved from Local Database", context);
         AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
         getTopThree();
 
         listSink.add(value);
-      }
-      else
-      {
+      } else {
         Loader.showLoader(context);
-        ContactProcess().getAllContacts((apiResponse) {
-          Loader.hideLoader();
-          if(apiResponse.status)
-          {
-            List<DoctorListResponseModel> _doctorList=List();
-            AppUtill.printAppLog("apiResponse::::${apiResponse.raw}");
-            _doctorList=apiResponse.raw != null ? (apiResponse.raw as List).map((i) => DoctorListResponseModel.fromJson(i)).toList() : List();
-            AppUtill.printAppLog("apiResponse::::${_doctorList.length}");
+        ContactProcess().getAllContacts(
+          (apiResponse) {
+            Loader.hideLoader();
+            if (apiResponse.status!) {
+              List<DoctorListResponseModel>? _doctorList =
+                  List<DoctorListResponseModel>.filled(
+                      0, DoctorListResponseModel(),
+                      growable: true);
+              AppUtill.printAppLog("apiResponse::::${apiResponse.raw}");
+              _doctorList = apiResponse.raw != null
+                  ? (apiResponse.raw as List)
+                      .map((i) => DoctorListResponseModel.fromJson(i))
+                      .toList()
+                  : List<DoctorListResponseModel>.filled(
+                      0, DoctorListResponseModel(),
+                      growable: true);
+              ;
+              AppUtill.printAppLog("apiResponse::::${_doctorList.length}");
 
-            _doctorList.forEach((element) {
-              DBProvider.db.newNote(element);
-            });
+              _doctorList.forEach((element) {
+                DBProvider.db.newNote(element);
+              });
 
-            DBProvider.db.getNotes().then((value) {
-              AppUtill.printAppLog("DBProvider.db.getNotes.length:: ${value.length}");
-              _doctorList=value;
-              listSink.add(_doctorList);
+              DBProvider.db.getNotes().then((value) {
+                AppUtill.printAppLog(
+                    "DBProvider.db.getNotes.length:: ${value!.length}");
+                _doctorList = value;
+                listSink.add(_doctorList);
+              });
 
-            });
-
-            getTopThree();
-
-          }
-          else{
-            AppDialog.showErrorDialog(context, "", apiResponse.msg, apiResponse.statusCode,onRetry: ()
-            {
-              getContacts(context);
-            });
-          }
-        },);
+              getTopThree();
+            } else {
+              AppDialog.showErrorDialog(
+                  context, "", apiResponse.msg, apiResponse.statusCode,
+                  onRetry: () {
+                getContacts(context);
+              });
+            }
+          },
+        );
       }
     });
   }
 
-  getTopThree()
-  {
-    DBProvider.db.getNoteTopThree().then((valuee)
-    {
+  getTopThree() {
+    DBProvider.db.getNoteTopThree().then((valuee) {
       carouselSliderSink.add(valuee);
-      AppUtill.printAppLog("DBProvider.db.getNotes.length2:: ${valuee.length}");
-
+      AppUtill.printAppLog(
+          "DBProvider.db.getNotes.length2:: ${valuee!.length}");
     });
   }
-
 }

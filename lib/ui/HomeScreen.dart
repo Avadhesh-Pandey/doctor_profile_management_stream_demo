@@ -26,12 +26,12 @@ class HomeScreen extends StatefulWidget {
 
 
 class HomeWidget extends State<HomeScreen> {
-  Size _size;
+  late Size _size;
   HomeScreenBlock _homeScreenBlock=HomeScreenBlock();
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _homeScreenBlock.getContacts(context);
     });
     super.initState();
@@ -93,7 +93,7 @@ class HomeWidget extends State<HomeScreen> {
                   negativeButtonText: "Confirm",
                   onNegativeButtonClicked: ()
                   {
-                    AppPrefs.getInstance().setLogout(true);
+                    AppPrefs.getInstance()!.setLogout(true);
                     DBProvider.db.deleteAll();
                     Navigator.pop(context);
                     Navigator.of(context).pushNamed('/login');
@@ -137,7 +137,7 @@ class HomeWidget extends State<HomeScreen> {
                   initialData: null,
                   builder: (BuildContext context,AsyncSnapshot snap)
                   {
-                    List<DoctorListResponseModel> _list=snap.data;
+                    List<DoctorListResponseModel>? _list=snap.data;
                     return snap.data==null?SizedBox():
                     Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -160,7 +160,7 @@ class HomeWidget extends State<HomeScreen> {
                           },
                           scrollDirection: Axis.horizontal,
                         ),
-                        items: _list.map((i) {
+                        items: _list!.map((i) {
                           return Builder(
                             builder: (BuildContext context) {
                               return GestureDetector(
@@ -206,7 +206,7 @@ class HomeWidget extends State<HomeScreen> {
     ), onWillPop: (){
       Navigator.pop(context);
       exit(0);
-    });
+    } as Future<bool> Function()?);
   }
 }
 

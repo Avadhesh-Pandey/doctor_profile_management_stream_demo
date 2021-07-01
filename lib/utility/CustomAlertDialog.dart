@@ -6,13 +6,13 @@ import 'package:doctor/utility/AppUtill.dart';
 import 'package:doctor/values/AppSetings.dart';
 
 class CustomAlertDialog extends StatelessWidget {
-  final String title, description, buttonText,negativeButtonText;
-  final String image;
-  bool isNegativeButtonVisible=false;
-  final Function() onPositiveButtonClicked;
-  final Function() onNegativeButtonClicked;
+  final String? title, description, buttonText,negativeButtonText;
+  final String? image;
+  bool? isNegativeButtonVisible=false;
+  final Function()? onPositiveButtonClicked;
+  final Function()? onNegativeButtonClicked;
 
-  static void show(BuildContext context,int dialogType,String description,{String image="images/emoji_happy.svg",String title="",String buttonText="",Function() onPositiveButtonClicked,Function() onNegativeButtonClicked,bool isNegativeButtonVisible=false,String negativeButtonText=""}){
+  static void show(BuildContext context,int dialogType,String? description,{String image="images/emoji_happy.svg",String title="",String buttonText="",Function()? onPositiveButtonClicked,Function()? onNegativeButtonClicked,bool isNegativeButtonVisible=false,String negativeButtonText=""}){
 
     if(buttonText.length==0)
     {
@@ -39,9 +39,9 @@ class CustomAlertDialog extends StatelessWidget {
   }
 
   CustomAlertDialog({
-    @required this.title,
-    @required this.description,
-    @required this.buttonText,
+    required this.title,
+    required this.description,
+    required this.buttonText,
     this.negativeButtonText,
     this.onNegativeButtonClicked,
     this.onPositiveButtonClicked,
@@ -86,9 +86,9 @@ class CustomAlertDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min, // To make the card compact
             children: <Widget>[
-              title.length>0?
+              title!.length>0?
               Text(
-                title,
+                title!,
                 style: TextStyle(
                     fontSize: AppFontSize.size20,
                     color: AppColors.blackTxt,
@@ -97,7 +97,7 @@ class CustomAlertDialog extends StatelessWidget {
               ):SizedBox(height: 0,),
               SizedBox(height: 8.0),
               Text(
-                description,
+                description!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: AppFontSize.size14,
@@ -117,17 +117,17 @@ class CustomAlertDialog extends StatelessWidget {
                         }
                         else
                         {
-                          onNegativeButtonClicked();
+                          onNegativeButtonClicked!();
                         }
                       },
-                      child: Text(negativeButtonText==null?"":negativeButtonText,
+                      child: Text(negativeButtonText==null?"":negativeButtonText!,
                         style: TextStyle(
                             fontSize: AppFontSize.size16,
                             color: AppColors.themeColor,
                             fontFamily: AppFonts.AppFont,
                             fontWeight: AppFontsStyle.BOLD),),
                     ),
-                    visible: isNegativeButtonVisible==null?false:isNegativeButtonVisible,
+                    visible: isNegativeButtonVisible==null?false:isNegativeButtonVisible!,
                   ),
                   Expanded(child: Text(""),flex: 1,),
                   Align(
@@ -140,10 +140,10 @@ class CustomAlertDialog extends StatelessWidget {
                         }
                         else
                         {
-                          onPositiveButtonClicked();
+                          onPositiveButtonClicked!();
                         }
                       },
-                      child: Text(buttonText,
+                      child: Text(buttonText!,
                         style: TextStyle(
                             fontSize: AppFontSize.size16,
                             color: AppColors.themeColor,
@@ -162,7 +162,7 @@ class CustomAlertDialog extends StatelessWidget {
           child: CircleAvatar(
               backgroundColor: AppColors.textFieldBG,
               radius: Consts.avatarRadius,
-              child: SvgPicture.asset(image,)
+              child: SvgPicture.asset(image!,)
           ),
         ),
       ],

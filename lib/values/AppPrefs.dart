@@ -3,12 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Keys.dart';
 
 class AppPrefs {
-  static AppPrefs _gcPrefrence = null;
-  static SharedPreferences _prefrence;
+  static AppPrefs? _gcPrefrence = null;
+  static SharedPreferences? _prefrence;
 
   AppPrefs._internal();
 
-  static AppPrefs getInstance() {
+  static AppPrefs? getInstance() {
     if (_gcPrefrence == null || _prefrence == null) {
       _init();
       _gcPrefrence = AppPrefs._internal();
@@ -28,14 +28,14 @@ class AppPrefs {
     _prefrence = await SharedPreferences.getInstance();
   }
 
-  bool checkLogin() {
-    return _prefrence.getBool(Keys.IS_LOGIN) == null
+  bool? checkLogin() {
+    return _prefrence!.getBool(Keys.IS_LOGIN) == null
         ? false
-        : _prefrence.getBool(Keys.IS_LOGIN);
+        : _prefrence!.getBool(Keys.IS_LOGIN);
   }
 
   setLogin() {
-    _prefrence.setBool(Keys.IS_LOGIN, true);
+    _prefrence!.setBool(Keys.IS_LOGIN, true);
   }
 
   setLogout(bool isClear) {
@@ -43,47 +43,47 @@ class AppPrefs {
       {
         int LangID=getIntData(Keys.LANGUAGE_ID);
         String fcm=getStringData(Keys.FCM_TOCKEN);
-        _prefrence.clear();
-        _prefrence.setBool(Keys.IS_LOGIN, false);
-        _prefrence.setInt(Keys.LANGUAGE_ID, LangID);
-        _prefrence.setString(Keys.FCM_TOCKEN, fcm);
+        _prefrence!.clear();
+        _prefrence!.setBool(Keys.IS_LOGIN, false);
+        _prefrence!.setInt(Keys.LANGUAGE_ID, LangID);
+        _prefrence!.setString(Keys.FCM_TOCKEN, fcm);
 
       }
     else
       {
-        _prefrence.setBool(Keys.IS_LOGIN, false);
+        _prefrence!.setBool(Keys.IS_LOGIN, false);
       }
   }
 
   setStringData(String key, String stringData) {
-    _prefrence.setString(key, stringData);
+    _prefrence!.setString(key, stringData);
   }
 
   getStringData(String key) {
-    return _prefrence.getString(key) == null ? "" : _prefrence.getString(key);
+    return _prefrence!.getString(key) == null ? "" : _prefrence!.getString(key);
   }
 
   setIntData(String key, int value) {
-    _prefrence.setInt(key, value);
+    _prefrence!.setInt(key, value);
   }
 
   getIntData(String key) {
-    return _prefrence.getInt(key) == null ? 0 : _prefrence.getInt(key);
+    return _prefrence!.getInt(key) == null ? 0 : _prefrence!.getInt(key);
   }
 
   setBoolData(String key, bool value) {
-    _prefrence.setBool(key, value);
+    _prefrence!.setBool(key, value);
   }
 
   getBoolData(String key) {
-    return _prefrence.getBool(key) == null ? false : _prefrence.getBool(key);
+    return _prefrence!.getBool(key) == null ? false : _prefrence!.getBool(key);
   }
 
   setDoubleData(String key, double value) {
-    _prefrence.setDouble(key, value);
+    _prefrence!.setDouble(key, value);
   }
 
   getDoubleData(String key) {
-    return _prefrence.getDouble(key) == null ? 0.0 : _prefrence.getDouble(key);
+    return _prefrence!.getDouble(key) == null ? 0.0 : _prefrence!.getDouble(key);
   }
 }

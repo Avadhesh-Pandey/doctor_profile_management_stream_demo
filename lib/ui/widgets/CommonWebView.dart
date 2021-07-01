@@ -88,7 +88,7 @@ class CommonWebWidget extends State<CommonWebView> {
           clearCookies: true,
         ), onWillPop: (){
           goBack();
-        }));
+        } as Future<bool> Function()?));
   }
 
   void goBack() {

@@ -48,7 +48,7 @@ class OTPBloc{
       if(value!=null && value.user!=null)
       {
         AppUtill.showToast("Authentication successful", context);
-        AppPrefs.getInstance().setLogin();
+        AppPrefs.getInstance()!.setLogin();
         Navigator.of(context).pop();
         Navigator.of(context).pushNamed('/home');
 

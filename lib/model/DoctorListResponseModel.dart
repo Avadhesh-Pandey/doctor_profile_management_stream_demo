@@ -1,22 +1,22 @@
 class DoctorListResponseModel {
-    int id;
-    String first_name;
-    String last_name;
-    String profile_pic;
-    bool favorite;
-    String primary_contact_no;
-    double rating;
-    String email_address;
-    String qualification;
-    String description;
-    String specialization;
-    String languagesKnown;
-    String gender;
-    String blood_group;
-    String height;
-    String weight;
-    String dob;
-    bool isEdited;
+    int? id;
+    String? first_name;
+    String? last_name;
+    String? profile_pic;
+    bool? favorite;
+    String? primary_contact_no;
+    double? rating;
+    String? email_address;
+    String? qualification;
+    String? description;
+    String? specialization;
+    String? languagesKnown;
+    String? gender;
+    String? blood_group;
+    String? height;
+    String? weight;
+    String? dob;
+    bool? isEdited;
 
 
     DoctorListResponseModel({this.id, this.first_name, this.last_name, this.profile_pic, this.favorite, this.primary_contact_no, this.rating, this.email_address, this.qualification, this.description, this.specialization, this.languagesKnown,this.gender,this.blood_group,this.height,this.weight,this.dob,this.isEdited});

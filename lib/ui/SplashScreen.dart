@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashStateFull extends State<SplashScreen> {
-  Size _size;
+  Size? _size;
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +59,9 @@ class SplashStateFull extends State<SplashScreen> {
     AppPrefs.getInstanceFuture((initialised)
     {
       AppUtill.printAppLog("AppPrefs-InstanceFuture");
-      if(AppPrefs.getInstance().checkLogin())
+      if(AppPrefs.getInstance()!.checkLogin()!)
     {
-      AppUtill.printAppLog("AUTH-TOKEN::"+AppPrefs.getInstance().getStringData(Keys.AUTH_TOCKEN));
+      AppUtill.printAppLog("AUTH-TOKEN::"+AppPrefs.getInstance()!.getStringData(Keys.AUTH_TOCKEN));
     }
     });
     Timer(Duration(seconds: 3), () {
@@ -72,7 +72,7 @@ class SplashStateFull extends State<SplashScreen> {
 
   void navigateFurther()
   {
-    if (AppPrefs.getInstance().checkLogin()) {
+    if (AppPrefs.getInstance()!.checkLogin()!) {
       Navigator.pop(context);
       Navigator.of(context).pushNamed('/home');
 

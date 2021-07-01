@@ -15,7 +15,7 @@ class AppDialog
   static const int DIALOG_INFO = 3;
 
 
-  static void show(BuildContext context,int dialogType,String description,{String title="",String buttonText=""}){
+  static void show(BuildContext context,int dialogType,String? description,{String title="",String buttonText=""}){
 
     if(buttonText.length==0)
     {
@@ -85,7 +85,7 @@ class AppDialog
   }
 
 
-  static showErrorDialog(context,title,msg,int code, {Function() onRetry}) {
+  static showErrorDialog(context,title,msg,int? code, {Function()? onRetry}) {
     if(code==401)
       {
         CustomAlertDialog.show(context, AppDialog.DIALOG_ERROR, msg,
@@ -93,7 +93,7 @@ class AppDialog
             negativeButtonText: "",
             onPositiveButtonClicked: ()
             {
-              AppPrefs.getInstance().setLogout(true);
+              AppPrefs.getInstance()!.setLogout(true);
               Navigator.popUntil(
                 context,
                 ModalRoute.withName('/home'),
