@@ -1,6 +1,6 @@
-# doctor
+# Doctor profile management using Streams
 
-A new Flutter application for doctors profiles management.
+A demo Flutter application for doctors profiles management using Stream.
 
 ## Getting Started
 
